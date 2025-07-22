@@ -1,4 +1,4 @@
-package prallel
+package parallel
 
 import (
 	"errors"

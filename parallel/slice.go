@@ -1,4 +1,4 @@
-package prallel
+package parallel
 
 import (
 	"github.com/xh3b4sd/tracer"
