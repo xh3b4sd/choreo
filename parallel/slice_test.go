@@ -2,8 +2,8 @@ package parallel
 
 import (
 	"errors"
-	"slices"
 	"sync"
+	"sync/atomic"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -13,21 +13,32 @@ import (
 func Test_Parallel_Slice_failure(t *testing.T) {
 	var inp []int
 	var out error
+	var num atomic.Int64
 	{
 		inp = []int{10, 20, 30, 40, 50}
 		out = errors.New("test error")
+		num = atomic.Int64{}
 	}
 
 	fnc := func(_ int, v int) error {
+		{
+			num.Add(1)
+		}
+
 		if v == 30 {
 			return tracer.Mask(out)
 		}
+
 		return nil
 	}
 
 	err := Slice(inp, fnc)
 	if !errors.Is(err, out) {
 		t.Fatal("expected", out, "got", err)
+	}
+
+	if int(num.Load()) != len(inp) {
+		t.Fatal("expected", len(inp), "got", num.Load())
 	}
 }
 
@@ -38,11 +49,12 @@ func Test_Parallel_Slice_success(t *testing.T) {
 	var out []string
 	{
 		inp = []string{"10", "20", "30", "40", "50"}
+		out = make([]string, len(inp))
 	}
 
-	fnc := func(_ int, v string) error {
+	fnc := func(i int, x string) error {
 		mut.Lock()
-		out = append(out, v)
+		out[i] = x // ensure reliable index/value mapping
 		mut.Unlock()
 		return nil
 	}
@@ -50,11 +62,6 @@ func Test_Parallel_Slice_success(t *testing.T) {
 	err := Slice(inp, fnc)
 	if err != nil {
 		t.Fatal("expected", nil, "got", err)
-	}
-
-	{
-		slices.Sort(inp)
-		slices.Sort(out)
 	}
 
 	if dif := cmp.Diff(inp, out); dif != "" {
