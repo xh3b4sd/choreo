@@ -121,10 +121,10 @@ func Test_Backoff_retry(t *testing.T) {
 	}
 }
 
-// Test_Backoff_replenish verifies that successful executions refill the
-// exhausted error budget, by moving the token index back again towards zero,
-// but never past zero itself. In other words, the beginning of the configured
-// backoff durations will be activated again at token index zero.
+// Test_Backoff_refill verifies that successful executions refill the exhausted
+// error budget, by moving the token index back again towards zero, but never
+// past zero itself. In other words, the beginning of the configured backoff
+// durations will be activated again at token index zero.
 func Test_Backoff_refill(t *testing.T) {
 	var err error
 

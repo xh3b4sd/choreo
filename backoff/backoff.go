@@ -10,7 +10,7 @@ func (t *Token) Backoff(fnc func() error) error {
 			// duration.
 
 			{
-				t.slp(t.bac[t.ind])
+				t.slp(t.bac[t.ind]) // TODO add jitter
 			}
 
 			// Increment the token index, if possible. In case the infinity flag has
