@@ -1,2 +1,94 @@
 # choreo
-simple execution path primitives
+
+This package is a collection of simple execution path primitives like retrying,
+timing out and runing business logic concurrently.
+
+### Backoff
+
+```golang
+package main
+
+import (
+	"errors"
+	"fmt"
+	"time"
+
+	"github.com/xh3b4sd/choreo/backoff"
+)
+
+func main() {
+	var tok *backoff.Token
+	{
+		tok = backoff.New(backoff.Config{
+			Bac: []time.Duration{
+				1 * time.Second,
+				2 * time.Second,
+				3 * time.Second,
+			},
+		})
+	}
+
+	fnc := func() error {
+		fmt.Printf("tried at second %d\n", time.Now().Second())
+		return errors.New("error")
+	}
+
+	err := tok.Backoff(fnc)
+	if err != nil {
+		fmt.Printf("%s at second %d\n", err.Error(), time.Now().Second())
+	}
+}
+
+```
+
+```
+go run ./backoff/example/
+```
+
+```
+tried at second 0
+tried at second 1
+tried at second 3
+error at second 6
+```
+
+### Parallel
+
+```golang
+package main
+
+import (
+	"fmt"
+
+	"github.com/xh3b4sd/choreo/parallel"
+)
+
+func main() {
+	var inp []string
+	{
+		inp = []string{"10", "20", "30", "40", "50"}
+	}
+
+	fnc := func(i int, x string) error {
+		fmt.Printf("index %d value %s\n", i, x)
+		return nil
+	}
+
+	err := parallel.Slice(inp, fnc)
+	if err != nil {
+		panic(err)
+	}
+}
+```
+
+```
+go run ./parallel/example/
+```
+
+```
+// index 1 value 20
+// index 2 value 30
+// index 4 value 50
+// index 0 value 10
+// index 3 value 40
+```
