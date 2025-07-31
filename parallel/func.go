@@ -16,9 +16,7 @@ func Func(fnc ...func() error) error {
 	}
 
 	for _, x := range fnc {
-		grp.Go(func() error {
-			return x()
-		})
+		grp.Go(x)
 	}
 
 	{
