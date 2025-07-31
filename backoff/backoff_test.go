@@ -8,7 +8,7 @@ import (
 	"github.com/google/go-cmp/cmp"
 )
 
-func Test_Backoff_retry(t *testing.T) {
+func Test_Backoff_Token_retry(t *testing.T) {
 	testCases := []struct {
 		des int
 		inf bool
@@ -121,11 +121,11 @@ func Test_Backoff_retry(t *testing.T) {
 	}
 }
 
-// Test_Backoff_refill verifies that successful executions refill the exhausted
-// error budget, by moving the token index back again towards zero, but never
-// past zero itself. In other words, the beginning of the configured backoff
-// durations will be activated again at token index zero.
-func Test_Backoff_refill(t *testing.T) {
+// Test_Backoff_Token_refill verifies that successful executions refill the
+// exhausted error budget, by moving the token index back again towards zero,
+// but never past zero itself. In other words, the beginning of the configured
+// backoff durations will be activated again at token index zero.
+func Test_Backoff_Token_refill(t *testing.T) {
 	var err error
 
 	suc := func() func() error {
