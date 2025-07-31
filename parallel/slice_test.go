@@ -1,8 +1,6 @@
 package parallel
 
 import (
-	"errors"
-	"sync"
 	"sync/atomic"
 	"testing"
 
@@ -12,11 +10,9 @@ import (
 
 func Test_Parallel_Slice_failure(t *testing.T) {
 	var inp []int
-	var out error
 	var num atomic.Int64
 	{
 		inp = []int{10, 20, 30, 40, 50}
-		out = errors.New("test error")
 		num = atomic.Int64{}
 	}
 
@@ -26,15 +22,15 @@ func Test_Parallel_Slice_failure(t *testing.T) {
 		}
 
 		if v == 30 {
-			return tracer.Mask(out)
+			return tracer.Mask(testError)
 		}
 
 		return nil
 	}
 
 	err := Slice(inp, fnc)
-	if !errors.Is(err, out) {
-		t.Fatal("expected", out, "got", err)
+	if !isTest(err) {
+		t.Fatal("expected", true, "got", err)
 	}
 
 	if int(num.Load()) != len(inp) {
@@ -42,9 +38,10 @@ func Test_Parallel_Slice_failure(t *testing.T) {
 	}
 }
 
+// Test_Parallel_Slice_success ensures reliable index/value mapping so that
+// distinct items of the same slice can be manipulated concurrently without
+// further synchronization.
 func Test_Parallel_Slice_success(t *testing.T) {
-	var mut sync.Mutex
-
 	var inp []string
 	var out []string
 	{
@@ -53,9 +50,7 @@ func Test_Parallel_Slice_success(t *testing.T) {
 	}
 
 	fnc := func(i int, x string) error {
-		mut.Lock()
-		out[i] = x // ensure reliable index/value mapping
-		mut.Unlock()
+		out[i] = x
 		return nil
 	}
 

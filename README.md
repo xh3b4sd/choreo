@@ -92,3 +92,53 @@ go run ./parallel/example/
 // index 0 value 10
 // index 3 value 40
 ```
+
+### Success
+
+```golang
+package main
+
+import (
+	"fmt"
+
+	"github.com/xh3b4sd/choreo/success"
+	"golang.org/x/sync/errgroup"
+)
+
+func main() {
+	var mut *success.Mutex
+	{
+		mut = success.New(success.Config{
+			Suc: 2,
+		})
+	}
+
+	var grp errgroup.Group
+	{
+		grp = errgroup.Group{}
+	}
+
+	for range 100 {
+		grp.Go(func() error {
+			return mut.Success(func() error {
+				fmt.Printf("hello world\n")
+				return nil
+			})
+		})
+	}
+
+	err := grp.Wait()
+	if err != nil {
+		panic(err)
+	}
+}
+```
+
+```
+go run ./success/example/
+```
+
+```
+hello world
+hello world
+```

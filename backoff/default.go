@@ -2,11 +2,11 @@ package backoff
 
 import "time"
 
-// Backoff returns the default token indexed backoff durations as a drop-in
+// Default returns the default token indexed backoff durations as a drop-in
 // option.
 //
 //	[ 1, 1, 2, 4, 8, 16, 32, 64 ]
-func Backoff() []time.Duration {
+func Default() []time.Duration {
 	return []time.Duration{
 		1 * time.Second,
 		1 * time.Second,
