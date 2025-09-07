@@ -38,7 +38,6 @@ func main() {
 		fmt.Printf("%s at second %d\n", err.Error(), time.Now().Second())
 	}
 }
-
 ```
 
 ```
@@ -50,6 +49,41 @@ tried at second 0
 tried at second 1
 tried at second 3
 error at second 6
+```
+
+### Jitter
+
+```golang
+package main
+
+import (
+	"fmt"
+	"time"
+
+	"github.com/xh3b4sd/choreo/jitter"
+)
+
+func main() {
+	jit := jitter.New[time.Duration](jitter.Config{
+		Per: 0.1,
+	})
+
+	for range 5 {
+		fmt.Printf("%s\n", jit.Percent(time.Minute))
+	}
+}
+```
+
+```
+go run ./jitter/example/
+```
+
+```
+55.771641992s
+1m4.528653402s
+59.012041686s
+55.326155258s
+1m3.387997178s
 ```
 
 ### Parallel

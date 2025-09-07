@@ -14,6 +14,13 @@ type Config struct {
 	// applied backoff, given an ascending list of durations. Every execution
 	// success decrements the token index which decreases the applied backoff
 	// again. The default list in seconds looks like the following.
+	//
+	//           [  1s,  3s,  9s  ]
+	//
+	//    i--    <- [i] ---------->    i++
+	//
+	//           [  t0,  t1,  t2  ]
+	//
 	Bac []time.Duration
 	// Inf is the infinity option to specify whether the last token index ends the
 	// backoff. By default, once the last token index was applied on failure, any
