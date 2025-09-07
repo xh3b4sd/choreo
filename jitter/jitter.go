@@ -9,7 +9,7 @@ import (
 )
 
 type Config struct {
-	// Per is the fraction of jitter added or removed at random. E.g.  0.25 will
+	// Per is the fraction of jitter added or removed at random. E.g. 0.25 will
 	// modify the given input by a random percentage between -25% and +25%.
 	// Values <= 0 and >= 1 will cause a runtime panic.
 	Per float64
