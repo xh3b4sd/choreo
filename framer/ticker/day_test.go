@@ -90,19 +90,19 @@ func Test_Framer_Ticker_Day_Tick(t *testing.T) {
 		{
 			now: "2024-03-31T23:59:59+02:00",
 			qnt: 0,
-			res: "2024-03-31T00:00:00+01:00",
+			res: "2024-03-31T00:00:00Z",
 		},
 		// Case 013, offset input +1 day
 		{
 			now: "2024-03-31T23:59:59+02:00",
 			qnt: +1,
-			res: "2024-04-01T00:00:00+02:00",
+			res: "2024-04-01T00:00:00Z",
 		},
 		// Case 014, offset input -1 day
 		{
 			now: "2024-03-31T23:59:59+02:00",
 			qnt: -1,
-			res: "2024-03-30T00:00:00+01:00",
+			res: "2024-03-30T00:00:00Z",
 		},
 	}
 
@@ -120,7 +120,7 @@ func Test_Framer_Ticker_Day_Tick(t *testing.T) {
 
 			var res string
 			{
-				res = Day(now).Tick(tc.qnt).Format(time.RFC3339Nano)
+				res = Day(now.UTC()).Tick(tc.qnt).Format(time.RFC3339Nano)
 			}
 
 			if dif := cmp.Diff(tc.res, res); dif != "" {

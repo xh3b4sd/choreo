@@ -192,19 +192,19 @@ func Test_Framer_Ticker_Quarter_Tick(t *testing.T) {
 		{
 			now: "2024-03-31T23:59:59+02:00",
 			qnt: 0,
-			res: "2024-01-01T00:00:00+01:00",
+			res: "2024-01-01T00:00:00Z",
 		},
 		// Case 030, mid-quarter with offset +1 quarter preserves offset boundary
 		{
 			now: "2024-05-20T08:00:00+02:00",
 			qnt: +1,
-			res: "2024-07-01T00:00:00+02:00",
+			res: "2024-07-01T00:00:00Z",
 		},
 		// Case 031, qnt=-1 with offset steps back one quarter
 		{
 			now: "2024-05-20T08:00:00+02:00",
 			qnt: -1,
-			res: "2024-01-01T00:00:00+01:00",
+			res: "2024-01-01T00:00:00Z",
 		},
 		// Case 032, very large positive qnt
 		{
@@ -234,7 +234,7 @@ func Test_Framer_Ticker_Quarter_Tick(t *testing.T) {
 
 			var res string
 			{
-				res = Quarter(now).Tick(tc.qnt).Format(time.RFC3339Nano)
+				res = Quarter(now.UTC()).Tick(tc.qnt).Format(time.RFC3339Nano)
 			}
 
 			if dif := cmp.Diff(tc.res, res); dif != "" {
