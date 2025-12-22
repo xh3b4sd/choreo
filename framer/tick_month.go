@@ -7,5 +7,5 @@ import (
 )
 
 func (t Tick) Month(qnt int) time.Time {
-	return ticker.Month(t.fra.tic).Tick(qnt)
+	return ticker.Month(t.fra.tic).Tick(qnt).Time()
 }

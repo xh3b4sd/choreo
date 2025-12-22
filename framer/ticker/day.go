@@ -12,17 +12,30 @@ func Day(tic time.Time) Interface {
 	}
 }
 
-func (d *day) Tick(qnt int) time.Time {
-	return truDay(d.tic).AddDate(0, 0, qnt)
+func (d *day) Round(mul int) Interface {
+	{
+		d.tic = rndDay(d.tic, mul)
+	}
+
+	return d
 }
 
-func truDay(tic time.Time) time.Time {
-	// Get the base parameters of the current time. Here the things that matter
-	// are year, month and day.
+func (d *day) Tick(qnt int) Interface {
+	{
+		d.tic = d.tic.AddDate(0, 0, qnt)
+	}
 
-	var y, m, d = tic.Date()
+	return d
+}
 
-	// Set the returned time to the first hour of the truncated day.
+func (d *day) Time() time.Time {
+	return d.tic
+}
 
-	return time.Date(y, m, d, 0, 0, 0, 0, tic.Location())
+func rndDay(tic time.Time, mul int) time.Time {
+	var yea, mon, _ = tic.Date()
+
+	var zer = time.Date(yea, mon, 1, 0, 0, 0, 0, tic.Location())
+
+	return zer.Add(tic.Sub(zer).Round(time.Duration(mul) * 24 * time.Hour))
 }
