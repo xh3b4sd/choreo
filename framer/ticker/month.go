@@ -33,13 +33,13 @@ func (m *month) Time() time.Time {
 }
 
 func rndMon(tic time.Time, mul int) time.Time {
-	var y, m, d = tic.Date()
+	var yea, mon, day = tic.Date()
 
-	if d >= 15 {
-		y, m, _ = time.Date(y, m, 1, 0, 0, 0, 0, tic.Location()).AddDate(0, 1, 0).Date()
+	if day >= 15 {
+		yea, mon, _ = time.Date(yea, mon, 1, 0, 0, 0, 0, tic.Location()).AddDate(0, 1, 0).Date()
 	}
 
-	var x = (((y*12 + (int(m) - 1)) + mul/2) / mul) * mul
+	var x = (((yea*12 + (int(mon) - 1)) + mul/2) / mul) * mul
 
 	return time.Date(x/12, time.Month(x%12+1), 1, 0, 0, 0, 0, tic.Location())
 }
