@@ -200,7 +200,7 @@ func Test_Framer_Last_Quarter(t *testing.T) {
 		{
 			min: "2024-01-01T00:00:00Z",
 			max: "2025-01-01T00:00:00Z",
-			qnt: 1,
+			qnt: 3,
 			res: []string{
 				"2024-01-01T00:00:00Z",
 				"2024-04-01T00:00:00Z",
@@ -212,7 +212,7 @@ func Test_Framer_Last_Quarter(t *testing.T) {
 		{
 			min: "2024-01-01T00:00:00Z",
 			max: "2025-01-01T00:00:00Z",
-			qnt: 2,
+			qnt: 6,
 			res: []string{
 				"2024-01-01T00:00:00Z",
 				"2024-07-01T00:00:00Z",
@@ -222,7 +222,7 @@ func Test_Framer_Last_Quarter(t *testing.T) {
 		{
 			min: "2023-10-01T00:00:00Z",
 			max: "2025-07-01T00:00:00Z",
-			qnt: 1,
+			qnt: 3,
 			res: []string{
 				"2023-10-01T00:00:00Z",
 				"2024-01-01T00:00:00Z",
@@ -237,7 +237,7 @@ func Test_Framer_Last_Quarter(t *testing.T) {
 		{
 			min: "2023-10-01T00:00:00Z",
 			max: "2025-10-01T00:00:00Z",
-			qnt: 3,
+			qnt: 9,
 			res: []string{
 				"2023-10-01T00:00:00Z",
 				"2024-07-01T00:00:00Z",
@@ -276,7 +276,7 @@ func Test_Framer_Last_Quarter(t *testing.T) {
 
 			var res []string
 
-			for t := fra.Tick(); !fra.Last(); fra.Quarter(tc.qnt) {
+			for t := fra.Tick(); !fra.Last(); fra.Month(tc.qnt) {
 				res = append(res, t.Time().Format(time.RFC3339Nano))
 			}
 

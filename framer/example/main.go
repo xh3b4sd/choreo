@@ -16,12 +16,12 @@ func main() {
 		})
 	}
 
-	for t := fra.Tick(); !fra.Last(); fra.Quarter(+1) {
+	for t := fra.Tick(); !fra.Last(); fra.Month(+3) {
 		var sta time.Time
 		var end time.Time
 		{
 			sta = t.Time()
-			end = t.Quarter(+1)
+			end = t.Month(+3)
 		}
 
 		{

@@ -7,5 +7,5 @@ import (
 )
 
 func (t Tick) Day(qnt int) time.Time {
-	return ticker.Day(t.fra.tic).Tick(qnt)
+	return ticker.Day(t.fra.tic).Tick(qnt).Time()
 }
